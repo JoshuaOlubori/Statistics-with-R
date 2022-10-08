@@ -1,0 +1,132 @@
+## Chapter 1 - Describing Data
+
+z <- c("abc","29 88")
+length(z)
+mode(z)
+library(MASS, lib.loc = "C:/Program Files/R/R-4.2.0/library")
+edit(anorexia)
+anorexia$Postwt-anorexia$Prewt
+demo()
+t.test(anorexia$Postwt-anorexia$Prewt, mu=0)
+edits(Cars93)
+edit(Cars93)
+hist(Cars93$Price)
+hist(Cars93$Price, xlab="Price (x $1,000", xlim=c(0,70), main = "Prices of 93 Models of 1993 Cars")
+library(MASS, lib.loc = "C:/Program Files/R/R-4.2.0/library")
+barplot(table(Cars93$Type))
+g =  barplot(table(Cars93$Type),ylim=c(0,25), xlab="Type",
+             ylab="Frequency", axis.lty = "solid", space = .05)
+g
+pie(table(Cars93$Type))
+type.frame <- data.frame(table(Cars93$Type))
+type.frame
+dotchart(type.frame$Freq, type.frame$Var1)
+# Bar Graphs
+hist(Cars93$Price, xlab="Price (x $1,000)", xlim = c(0,70), main = "Prices of 93 Models of 1993 Cars",probability = TRUE)
+# add a line to the density plot
+lines(density(Cars93$Price))
+# Bar plots for categorical variables
+table(Cars93$Type)
+barplot(table(Cars93$Type))
+# improve the barplot
+barplot(table(Cars93$Type), ylim=c(0,25), xlab="Type", ylab="Frequency", axis.lty="solid", space=.05)
+# pie graph
+pie(table(Cars93$Type))
+# Dotcharts
+# Alternative to barchart
+# First turn table into dataframe
+type.frame <- data.frame(table(Cars93$Type))
+type.frame
+# using the dotchart function
+dotchart(type.frame$Freq, type.frame$Var1)
+# Grouped Bar plot
+# 1. Create a vector of datapoints
+rev.values -> c(1000,1300,1300,1100,1400,800,1200,1500,1850,
+                2330,860,1300,1400,1600,1970,570,380,450,465,580,
+                155,190,210,250,300)
+rev.values <- c(1000,1300,1300,1100,1400,800,1200,1500,1850,
+                +                 2330,860,1300,1400,1600,1970,570,380,450,465,580,
+                +                 155,190,210,250,300)
+# 2. Turn vector into a matrix
+space.rev <- matrix(rev.values,nrow=5,byrow = T)
+# 3. supply column names
+colnames(space.rev) <-
+  c("1990","1991","1992","1993","1994")
+# 4. supply row names
+rownames(space.rev) <- c("Commercial Satellites
+Delivered","Satellite Services","Satellite Ground
+Equipment","Commercial Launches","Remote Sensing Data")
+space.rev
+# With the data in hand, you move on to the bar plot. You create a vector of colors
+for the bars:
+  # With the data in hand, you move on to the bar plot. You create a vector of colors for the bars:
+  color.names = c("black","grey25","grey50","grey75","white")
+barplot(space.rev, beside = T, xlab= "Year",ylab= "Revenue
+(X $1,000)", col=color.names)
+# adding legend
+legend(1,2300,rownames(space.rev), cex=0.7, fill = color.names, bty = "n")
+# Scatterplots
+plot(Cars93$Horsepower, Cars93$MPG.city, xlab="Horsepower",ylab="MPG City", main ="MPG City vs Horsepower")
+# or
+plot(Cars93$MPG.city ~ Cars93$Horsepower,xlab="Horsepower",ylab="MPG City", main ="MPG City vs Horsepower")
+# changing the plotting character
+plot(Cars93$Horsepower, Cars93$MPG.city, xlab="Horsepower",ylab="MPG City", main ="MPG City vs Horsepower", pch=16)
+# conditioning plot on another variable
+pch = as.character(Cars93$Cylinders)
+plot(Cars93$Horsepower, Cars93$MPG.city, xlab="Horsepower",ylab="MPG City", main ="MPG City vs Horsepower", pch=as.character(Cars93$Cylinders))
+#
+#
+# In line with our intuitions about cars, this plot clearly shows that lower numbers
+of cylinders associate with lower horsepower and higher gas mileage, and that
+higher numbers of cylinders associate with higher horsepower and lower gas
+mileage. You can also quickly see where the rotary engine fits into all this (low gas mileage, high horsepower).
+#
+#
+#
+# Now to create a matrix of scatterplots
+# first select features of interest (all numeric)
+cars.subset <- subset(Cars93, select = c(MPG.city, Price, Horsepower))
+# inspect
+head(cars.subset)
+# visualize
+pairs(cars.subset)
+# adding a categorical variable to the mix
+cars.subset <- subset(Cars93, select = c(MPG.city, Price, Horsepower, Cylinders))
+head(cars.subset)
+pairs(cars.subset
+)
+# observations:
+# 1.The greater the number of cylinders, the lower the gas mileage
+# 2.The greater the nnumber of cylinders, the greater the price
+# 3. The greater the number of cylinders, the greater the horsepower
+# Graduating to ggplot2
+# histogram
+library(ggplot2)
+ggplot(Cars93, aes(x=Price))
+#
+# Now, tell ggplot to plot an histogram
+ggplot(Cars93, aes(x=Price)) + geom_histogram()
+# prettify the plot
+ggplot(Cars93, aes(x=Price)) + geom_histogram(binwidth = 5, fill="white", color="black") + labs((x = "Price (x $1000)", y="Frequency", title="Prices of 93 Models of 1993 Cars")
+                                                                                                ggplot(Cars93, aes(x=Price)) + geom_histogram(binwidth=5,color="black",fill="white") + labs(x = "Price (x $1000)", y="Frequency", title="Prices of 93 Models of 1993 Cars")
+                                                                                                #
+                                                                                                #
+                                                                                                # Bar plots
+                                                                                                ggplot(Cars93, aes(x=Type)) + geom_bar() + labs(y="Frequency", title="Car Type and Frequency in Cars93")
+                                                                                                #
+                                                                                                # Dot Chart
+                                                                                                ggplot(type.frame, aes(x=Frequency,y=reorder(Type,Frequency))) +geom_point(size = 4) +theme_bw() +theme(panel.grid.major.x=element_blank(),panel.grid.major.y=element_line(color = "black",linetype = "dotted"))+labs(y="Type")
+                                                                                                type.frame <- data.frame(table(Cars$93.Type))
+                                                                                                type.frame <- data.frame(table(Cars$93.Type))
+                                                                                                type.frame <- data.frame(table(Cars$93.Type))
+                                                                                                colnames(type.frame)<- c("Type","Frequency")
+                                                                                                type.frame
+                                                                                                ggplot(type.frame, aes(x=Frequency,y=reorder(Type,Frequency))) +geom_point(size = 4) +theme_bw() +theme(panel.grid.major.x=element_blank(),panel.grid.major.y=element_line(color = "black",linetype = "dotted"))+labs(y="Type")
+                                                                                                space.melt <- melt(space.rev)
+                                                                                                # scatterplot matrix
+                                                                                                # Boxplots
+                                                                                                ggplot(Cars93, aes(x=Cylinders,y=Horsepower)) +geom_boxplot()
+                                                                                                # add datapoint
+                                                                                                ggplot(Cars93, aes(x=Cylinders,y=Horsepower)) +geom_boxplot() + geom_point()
+                                                                                                # jitter the plots
+                                                                                                ggplot(Cars93, aes(x=Cylinders,y=Horsepower)) +geom_boxplot() + geom_point() + geom_jitter()
